@@ -20,6 +20,8 @@ This repo holds our offseason test drivebase code. Our test drivebase is a swerv
     `./venv/Scripts/Activate.ps1`
 - Install the code formatter
     `pip install -r requirements.txt`
+- Install the pre-commit hooks for formatting
+    `pre-commit install`
 
 ## Build steps:
 - To build the code, press Ctrl+Shift+P and search for "Build Robot Code". This will build the robot code for the robot, as well as simulation (desktop).
