@@ -18,4 +18,5 @@ modifiableFileExclude {
    .github/
    README.md
    .pre-commit-config.yaml
+   .clang-tidy
 }

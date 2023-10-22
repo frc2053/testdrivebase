@@ -2,13 +2,9 @@
 
 name: Build Robot Code
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch.
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,3 +32,19 @@ jobs:
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
       run: ./gradlew build
+
+    # Generated the compile_commands.json for clang-tidy
+    - name: Generate compile_commands.json
+      run: ./gradlew generateCompileCommands
+
+    # Setup wpiformat
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: Install wpiformat
+      run: pip3 install wpiformat
+
+    # Runs clang tidy
+    - name: Clang Tidy
+      run: wpiformat -no-format -tidy-all -compile-commands=build/compile_commands/linuxathena/
