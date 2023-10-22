@@ -19,4 +19,8 @@ modifiableFileExclude {
    README.md
    .pre-commit-config.yaml
    .clang-tidy
+   \.wpilog$
+   networktables.json
+   simgui-ds.json
+   simgui.json
 }

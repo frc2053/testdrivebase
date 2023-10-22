@@ -177,3 +177,11 @@ out/
 #deployed git commit and hash files
 src/main/deploy/branch.txt
 src/main/deploy/commit.txt
+
+#wpilogs
+*.wpilog
+
+#sim stuff
+networktables.json
+simgui-ds.json
+simgui.json

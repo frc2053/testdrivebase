@@ -17,6 +17,7 @@
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "python.terminal.activateEnvInCurrentTerminal": true,
   "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+  "C_Cpp.autoAddFileAssociations": false,
   "emeraldwalk.runonsave": {
     "commands": [
       {
