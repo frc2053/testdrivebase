@@ -17,4 +17,5 @@ modifiableFileExclude {
    .gitignore
    .github/
    README.md
+   .pre-commit-config.yaml
 }
