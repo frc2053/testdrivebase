@@ -4,9 +4,17 @@
 
 #include "Robot.h"
 
+#include <frc/DataLogManager.h>
+#include <frc/DriverStation.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() { }
+void Robot::RobotInit()
+{
+  // These lines of code will record all changes to network table values as well
+  // as driverstation joystick and control values
+  frc::DataLogManager::Start();
+  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
+}
 
 void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
 

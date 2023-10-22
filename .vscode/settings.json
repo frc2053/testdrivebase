@@ -16,5 +16,17 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "python.terminal.activateEnvInCurrentTerminal": true,
-  "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe"
+  "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.cpp$",
+        "cmd": "${workspaceFolder}/venv/Scripts/wpiformat.exe"
+      },
+      {
+        "match": "\\.h$",
+        "cmd": "${workspaceFolder}/venv/Scripts/wpiformat.exe"
+      }
+    ]
+  }
 }

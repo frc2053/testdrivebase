@@ -173,3 +173,7 @@ out/
 
 # python venv
 /venv
+
+#deployed git commit and hash files
+src/main/deploy/branch.txt
+src/main/deploy/commit.txt
