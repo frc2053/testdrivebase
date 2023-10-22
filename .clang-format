@@ -8,5 +8,5 @@ Language: Cpp
 SortIncludes: 'true'
 SortUsingDeclarations: 'true'
 UseTab: Never
-
+AccessModifierOffset: '-2'
 ...

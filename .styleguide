@@ -12,4 +12,7 @@ cppSrcFileInclude {
 modifiableFileExclude {
    gradle/
    requirements.txt
+   src/main/deploy/
+   .wpilib/
+   .gitignore
 }
