@@ -15,4 +15,6 @@ modifiableFileExclude {
    src/main/deploy/
    .wpilib/
    .gitignore
+   .github/
+   README.md
 }
