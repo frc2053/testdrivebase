@@ -1,0 +1,12 @@
+---
+BasedOnStyle: WebKit
+ColumnLimit: '80'
+ConstructorInitializerIndentWidth: '2'
+ContinuationIndentWidth: '2'
+IndentWidth: '2'
+Language: Cpp
+SortIncludes: 'true'
+SortUsingDeclarations: 'true'
+UseTab: Never
+
+...
