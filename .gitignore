@@ -185,3 +185,4 @@ src/main/deploy/commit.txt
 networktables.json
 simgui-ds.json
 simgui.json
+/ctre_sim

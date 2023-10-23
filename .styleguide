@@ -24,4 +24,5 @@ modifiableFileExclude {
    simgui-ds.json
    simgui.json
    vendordeps/
+   ctre_sim/
 }
