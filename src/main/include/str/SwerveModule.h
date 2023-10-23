@@ -7,7 +7,7 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 
-#include <ctre/phoenix6/CANCoder.hpp>
+#include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
 
 class SwerveModule {
