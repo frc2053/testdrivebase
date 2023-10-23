@@ -23,4 +23,5 @@ modifiableFileExclude {
    networktables.json
    simgui-ds.json
    simgui.json
+   vendordeps/
 }
