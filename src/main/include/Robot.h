@@ -10,6 +10,8 @@
 #include <optional>
 
 #include "RobotContainer.h"
+#include "str/Alert.h"
+#include "str/SwerveModule.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -31,5 +33,8 @@ public:
 private:
   std::optional<frc2::CommandPtr> m_autonomousCommand;
 
+  SwerveModule testModule{1, 2, 3, 0, false, false};
+  alert::Alert canError{"CAN errors detected, robot may not be controllable.",
+    alert::AlertType::CRITICAL};
   RobotContainer m_container;
 };

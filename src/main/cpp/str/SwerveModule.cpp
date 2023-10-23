@@ -57,6 +57,9 @@ void SwerveModule::ConfigureDriveMotor(bool invertDrive)
       "Swerve Module ConfigureDriveMotor() status wasn't ok it was: "
       "{}. More info: {}",
       status.GetName(), status.GetDescription()));
+  } else {
+    frc::DataLogManager::Log(
+      "Swerve Module ConfigureDriveMotor() status was OK");
   }
 }
 
@@ -71,6 +74,9 @@ void SwerveModule::ConfigureSteerEncoder(double encOffset)
       "Swerve Module ConfigureSteerEncoder() status wasn't ok it was: "
       "{}. More info: {}",
       status.GetName(), status.GetDescription()));
+  } else {
+    frc::DataLogManager::Log(
+      "Swerve Module ConfigureSteerEncoder() status was OK");
   }
 }
 
@@ -109,6 +115,9 @@ void SwerveModule::ConfigureSteerMotor(bool invertSteer)
       "Swerve Module ConfigureSteerMotor() status wasn't ok it was: "
       "{}. More info: {}",
       status.GetName(), status.GetDescription()));
+  } else {
+    frc::DataLogManager::Log(
+      "Swerve Module ConfigureSteerMotor() status was OK");
   }
 }
 

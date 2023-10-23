@@ -5,6 +5,7 @@
 #include "Robot.h"
 
 #include <fmt/format.h>
+#include <frc/RobotController.h>
 #include <frc2/command/CommandScheduler.h>
 
 #include "str/DataUtils.h"
