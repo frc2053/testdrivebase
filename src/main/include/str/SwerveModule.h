@@ -20,7 +20,8 @@ public:
   frc::SwerveModulePosition GetCachedPosition();
   frc::SwerveModuleState GetCurrentState();
   void ResetPosition();
-  std::array<ctre::phoenix6::BaseStatusSignal*, 4> GetSignals();
+  std::array<std::reference_wrapper<ctre::phoenix6::BaseStatusSignal>, 4>
+  GetSignals();
 
   ctre::phoenix6::hardware::TalonFX driveMotor;
   ctre::phoenix6::hardware::TalonFX steerMotor;
@@ -33,14 +34,16 @@ private:
 
   frc::SwerveModulePosition internalState;
 
-  ctre::phoenix6::StatusSignal<units::turn_t>& steerAngleSig
-    = steerMotor.GetPosition();
-  ctre::phoenix6::StatusSignal<units::turns_per_second_t>& steerAngleVelSig
-    = steerMotor.GetVelocity();
-  ctre::phoenix6::StatusSignal<units::turn_t>& drivePositionSig
-    = driveMotor.GetPosition();
-  ctre::phoenix6::StatusSignal<units::turns_per_second_t>& driveVelocitySig
-    = driveMotor.GetVelocity();
+  std::reference_wrapper<ctre::phoenix6::StatusSignal<units::turn_t>>
+    steerAngleSig = steerMotor.GetPosition();
+  std::reference_wrapper<
+    ctre::phoenix6::StatusSignal<units::turns_per_second_t>>
+    steerAngleVelSig = steerMotor.GetVelocity();
+  std::reference_wrapper<ctre::phoenix6::StatusSignal<units::turn_t>>
+    drivePositionSig = driveMotor.GetPosition();
+  std::reference_wrapper<
+    ctre::phoenix6::StatusSignal<units::turns_per_second_t>>
+    driveVelocitySig = driveMotor.GetVelocity();
 
   ctre::phoenix6::controls::MotionMagicVoltage angleSetter{0_rad};
   ctre::phoenix6::controls::VelocityTorqueCurrentFOC velocityTorqueSetter{
