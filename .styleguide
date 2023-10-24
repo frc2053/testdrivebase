@@ -25,4 +25,5 @@ modifiableFileExclude {
    simgui.json
    vendordeps/
    ctre_sim/
+   .pathplanner/
 }
