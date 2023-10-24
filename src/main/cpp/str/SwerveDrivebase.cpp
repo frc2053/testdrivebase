@@ -11,7 +11,11 @@
 
 #include <ctre/phoenix6/Utils.hpp>
 
-SwerveDrivebase::SwerveDrivebase() { }
+SwerveDrivebase::SwerveDrivebase(
+  std::function<void(SwerveDriveState)> telemFunc)
+  : telemetryFunction(telemFunc)
+{
+}
 
 SwerveDrivebase::~SwerveDrivebase()
 {
@@ -78,12 +82,13 @@ void SwerveDrivebase::UpdateOdometry()
         imu.GetYaw(), imu.GetAngularVelocityZ());
     odometry.Update(frc::Rotation2d{imuYaw}, modulePostions);
 
-    // requestParameters.currentPose =
-    // odometry.GetEstimatedPosition().RelativeTo(
-    //   frc::Pose2d{0_m, 0_m, fieldRelativeOffset});
-    // requestParameters.kinematics = kinematics;
-    // requestParameters.swervePositions = moduleLocations;
-    // requestParameters.timestamp = currentTime;
+    requestParameters.currentPose = odometry.GetEstimatedPosition().RelativeTo(
+      frc::Pose2d{0_m, 0_m, fieldRelativeOffset});
+    requestParameters.kinematics = kinematics;
+    requestParameters.swervePositions = moduleLocations;
+    requestParameters.timestamp = currentTime;
+
+    requestToApply->Apply(requestParameters, modules);
 
     cachedState.failedDaqs = failedDaqs;
     cachedState.successfulDaqs = successfulDaqs;
@@ -93,13 +98,20 @@ void SwerveDrivebase::UpdateOdometry()
     cachedState.pose = odometry.GetEstimatedPosition();
     cachedState.odometryPeriod = averageLoopTime;
 
+    telemetryFunction(cachedState);
+
     if (successfulDaqs > 2) {
       validOdom = true;
     }
   }
 }
 
-void SwerveDrivebase::SetControl() { }
+void SwerveDrivebase::SetControl(
+  std::unique_ptr<RequestTypes::SwerveRequest> request)
+{
+  std::unique_lock<std::shared_mutex> writeLock(lock);
+  requestToApply = std::move(request);
+}
 
 void SwerveDrivebase::TareEverything()
 {
@@ -156,12 +168,6 @@ void SwerveDrivebase::UpdateSimState(
   units::second_t dt, units::volt_t supplyVoltage)
 {
   simDrivetrain.Update(dt, supplyVoltage, modules);
-}
-
-void SwerveDrivebase::RegisterTelemetry(
-  std::function<void(SwerveDriveState)> consumerFunc)
-{
-  telemetryFunction = consumerFunc;
 }
 
 bool SwerveDrivebase::IsOdometryValid() { return validOdom; }
