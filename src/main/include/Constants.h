@@ -36,6 +36,10 @@ namespace drivebase {
 
     static constexpr double STEER_MOTION_MAGIC_ACCEL = 100.0;
     static constexpr double STEER_MOTION_MAGIC_CRUISE_VEL = 10.0;
+
+    static constexpr double TRANSLATION_P = 10.0;
+    static constexpr double TRANSLATION_I = 0.0;
+    static constexpr double TRANSLATION_D = 0.0;
   } // namespace gains
 
   namespace can {

@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/SubsystemBase.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include <functional>
 #include <memory>
@@ -27,4 +28,6 @@ public:
 
 private:
   SwerveTelemetry telem{constants::drivebase::physical::MAX_DRIVE_SPEED};
+  void SetupAutoBuilder();
+  RequestTypes::ApplyChassisSpeeds autoRequest{};
 };
