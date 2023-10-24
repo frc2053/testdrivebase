@@ -125,8 +125,8 @@ frc::SwerveModulePosition SwerveModule::GetPosition(bool refresh)
 {
   if (refresh) {
     ctre::phoenix::StatusCode status
-      = ctre::phoenix6::BaseStatusSignal::WaitForAll(0_s, steerAngleSig.get(),
-        steerAngleVelSig.get(), drivePositionSig.get(), driveVelocitySig.get());
+      = ctre::phoenix6::BaseStatusSignal::WaitForAll(0_s, steerAngleSig,
+        steerAngleVelSig, drivePositionSig, driveVelocitySig);
     if (!status.IsOK()) {
       frc::DataLogManager::Log(fmt::format(
         "Swerve Module WaitForAll() status wasn't ok it was: {}. More info: {}",
@@ -136,10 +136,10 @@ frc::SwerveModulePosition SwerveModule::GetPosition(bool refresh)
 
   units::turn_t driveTurns
     = ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(
-      drivePositionSig.get(), driveVelocitySig.get());
+      drivePositionSig, driveVelocitySig);
   units::turn_t steerTurns
     = ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(
-      steerAngleSig.get(), steerAngleVelSig.get());
+      steerAngleSig, steerAngleVelSig);
 
   // This compensates for when the drive wheel rotates a little when you rotate
   // the module
@@ -159,7 +159,7 @@ void SwerveModule::GoToState(frc::SwerveModuleState state, bool openLoop)
     = frc::SwerveModuleState::Optimize(state, internalState.angle);
 
   // Reverses the expected module shimmy when rotating
-  units::turns_per_second_t moduleTurnSpeed = steerAngleVelSig.get().GetValue();
+  units::turns_per_second_t moduleTurnSpeed = steerAngleVelSig.GetValue();
   units::turns_per_second_t driveRateBackout
     = moduleTurnSpeed * constants::drivebase::physical::DRIVE_STEER_COUPLING;
   units::turns_per_second_t velocityToGoTo
@@ -190,15 +190,15 @@ frc::SwerveModuleState SwerveModule::GetCurrentState()
 {
   return frc::SwerveModuleState{
     str::Units::ConvertAngularVelocityToLinearVelocity(
-      driveVelocitySig.get().GetValue(),
+      driveVelocitySig.GetValue(),
       constants::drivebase::physical::WHEEL_DIAM / 2),
-    frc::Rotation2d{steerAngleSig.get().GetValue().convert<units::radians>()}};
+    frc::Rotation2d{steerAngleSig.GetValue().convert<units::radians>()}};
 }
 
 void SwerveModule::ResetPosition() { driveMotor.SetPosition(0_tr); }
 
-std::array<std::reference_wrapper<ctre::phoenix6::BaseStatusSignal>, 4>
-SwerveModule::GetSignals()
+std::array<ctre::phoenix6::BaseStatusSignal*, 4> SwerveModule::GetSignals()
 {
-  return {drivePositionSig, driveVelocitySig, steerAngleSig, steerAngleVelSig};
+  return {
+    &drivePositionSig, &driveVelocitySig, &steerAngleSig, &steerAngleVelSig};
 }
