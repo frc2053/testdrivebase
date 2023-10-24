@@ -17,7 +17,7 @@
 struct SimSwerveModule {
   frc::sim::DCMotorSim steerMotor{frc::DCMotor::Falcon500(1),
     constants::drivebase::physical::STEER_GEARING,
-    units::moment_of_inertia::kilogram_square_meter_t{0.001}};
+    units::moment_of_inertia::kilogram_square_meter_t{0.00001}};
   frc::sim::DCMotorSim driveMotor{frc::DCMotor::Falcon500(1),
     constants::drivebase::physical::DRIVE_GEARING,
     units::moment_of_inertia::kilogram_square_meter_t{0.001}};

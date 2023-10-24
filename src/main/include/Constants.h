@@ -23,7 +23,7 @@ namespace drivebase {
     static constexpr double DRIVE_KA = 0.0;
     static constexpr double DRIVE_KV = 0.0;
     static constexpr double DRIVE_KS = 0.0;
-    static constexpr double DRIVE_KP = 1.0;
+    static constexpr double DRIVE_KP = 3.0;
     static constexpr double DRIVE_KI = 0.0;
     static constexpr double DRIVE_KD = 0.0;
 
@@ -32,7 +32,7 @@ namespace drivebase {
     static constexpr double STEER_KS = 0.0;
     static constexpr double STEER_KP = 1.0;
     static constexpr double STEER_KI = 0.0;
-    static constexpr double STEER_KD = 0.0;
+    static constexpr double STEER_KD = 0.05;
 
     static constexpr double STEER_MOTION_MAGIC_ACCEL = 100.0;
     static constexpr double STEER_MOTION_MAGIC_CRUISE_VEL = 10.0;
