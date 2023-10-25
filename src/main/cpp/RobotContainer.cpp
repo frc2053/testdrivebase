@@ -14,19 +14,19 @@ void RobotContainer::ConfigureBindings()
   drivebaseSub.SetDefaultCommand(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentric>(
       drive
-        .withVelocityX(-driverController.GetRawAxis(1)
+        .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
-        .withVelocityY(-driverController.GetRawAxis(0)
+        .withVelocityY(-driverController.GetLeftX()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
-        .withRotationalRate(-driverController.GetRawAxis(2) * 3.14_rad_per_s));
+        .withRotationalRate(-driverController.GetRightX() * 3.14_rad_per_s));
   }));
 
   driverController.A().WhileTrue(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
       driveAtAngle
-        .withVelocityX(-driverController.GetRawAxis(1)
+        .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
-        .withVelocityY(-driverController.GetRawAxis(0)
+        .withVelocityY(-driverController.GetLeftX()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withTargetDirection(180_deg));
   }));
