@@ -52,8 +52,6 @@ void SwerveDrivebase::UpdateOdometry()
     sig->SetUpdateFrequency(250_Hz);
   }
 
-  fmt::print("About to go infinite >:)\n");
-
   // runs in seperate thread so we chillin'
   while (true) {
     ctre::phoenix::StatusCode status;
