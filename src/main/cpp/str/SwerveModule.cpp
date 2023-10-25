@@ -205,3 +205,8 @@ std::array<ctre::phoenix6::BaseStatusSignal*, 4> SwerveModule::GetSignals()
   return {
     &drivePositionSig, &driveVelocitySig, &steerAngleSig, &steerAngleVelSig};
 }
+
+void SwerveModule::SetSteerMotorVolts(units::volt_t voltage)
+{
+  steerMotor.SetControl(identifySteerSetter.WithOutput(voltage));
+}

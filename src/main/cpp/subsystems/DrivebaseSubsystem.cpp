@@ -59,3 +59,5 @@ void DrivebaseSubsystem::SetupAutoBuilder()
       pathplanner::ReplanningConfig{false}),
     this);
 }
+
+frc2::CommandPtr DrivebaseSubsystem::CharacterizeSteerMotors() { }

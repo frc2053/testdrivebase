@@ -22,6 +22,8 @@ public:
     std::function<std::unique_ptr<RequestTypes::SwerveRequest>()>
       requestSupplier);
 
+  frc2::CommandPtr CharacterizeSteerMotors();
+
   void Periodic() override;
   void SimulationPeriodic() override;
   void SeedFieldRelative(frc::Pose2d location) override;

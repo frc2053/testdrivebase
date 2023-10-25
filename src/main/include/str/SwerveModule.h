@@ -22,6 +22,8 @@ public:
   void ResetPosition();
   std::array<ctre::phoenix6::BaseStatusSignal*, 4> GetSignals();
 
+  void SetSteerMotorVolts(units::volt_t voltage);
+
   ctre::phoenix6::hardware::TalonFX driveMotor;
   ctre::phoenix6::hardware::TalonFX steerMotor;
   ctre::phoenix6::hardware::CANcoder steerEnc;
@@ -46,4 +48,5 @@ private:
   ctre::phoenix6::controls::VelocityTorqueCurrentFOC velocityTorqueSetter{
     0_rad_per_s};
   ctre::phoenix6::controls::VoltageOut voltageOpenLoopSetter{0_V};
+  ctre::phoenix6::controls::VoltageOut identifySteerSetter{0_V};
 };
