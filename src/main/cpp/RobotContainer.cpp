@@ -18,9 +18,13 @@ void RobotContainer::ConfigureBindings()
       drive
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .1)
         .withVelocityY(-driverController.GetLeftX()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
-        .withRotationalRate(-driverController.GetRightX() * 3.14_rad_per_s));
+        .withRotationalRate(-driverController.GetRightX()
+          * constants::drivebase::physical::MAX_ROTATION_SPEED)
+        .withRotationalDeadband(
+          constants::drivebase::physical::MAX_ROTATION_SPEED * .1));
   }));
 
   driverController.A().WhileTrue(drivebaseSub.ApplyRequest([this] {
