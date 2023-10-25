@@ -30,6 +30,36 @@ void RobotContainer::ConfigureBindings()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withTargetDirection(180_deg));
   }));
+
+  driverController.X().WhileTrue(drivebaseSub.ApplyRequest([this] {
+    return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
+      driveAtAngle
+        .withVelocityX(-driverController.GetLeftY()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withVelocityY(-driverController.GetLeftX()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withTargetDirection(90_deg));
+  }));
+
+  driverController.B().WhileTrue(drivebaseSub.ApplyRequest([this] {
+    return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
+      driveAtAngle
+        .withVelocityX(-driverController.GetLeftY()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withVelocityY(-driverController.GetLeftX()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withTargetDirection(-90_deg));
+  }));
+
+  driverController.Y().WhileTrue(drivebaseSub.ApplyRequest([this] {
+    return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
+      driveAtAngle
+        .withVelocityX(-driverController.GetLeftY()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withVelocityY(-driverController.GetLeftX()
+          * constants::drivebase::physical::MAX_DRIVE_SPEED)
+        .withTargetDirection(0_deg));
+  }));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
