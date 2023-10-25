@@ -56,6 +56,6 @@ void DrivebaseSubsystem::SetupAutoBuilder()
         constants::drivebase::gains::TRANSLATION_D},
       constants::drivebase::physical::MAX_DRIVE_SPEED,
       constants::drivebase::physical::WHEELBASE_LENGTH / 2,
-      pathplanner::ReplanningConfig{}),
+      pathplanner::ReplanningConfig{false}),
     this);
 }
