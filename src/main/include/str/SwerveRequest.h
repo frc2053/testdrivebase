@@ -9,6 +9,7 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include "Constants.h"
 #include "str/CTREPIDController.h"
 #include "str/SwerveModule.h"
 
@@ -153,10 +154,15 @@ public:
   units::meters_per_second_t deadband = 0_mps;
   units::radians_per_second_t rotationalDeadband = 0_rad_per_s;
   bool isOpenLoop = true;
-  CTREPIDController headingController{1, 0, 0};
+  CTREPIDController headingController{constants::drivebase::gains::ROTATION_P,
+    constants::drivebase::gains::ROTATION_I,
+    constants::drivebase::gains::ROTATION_D};
   ctre::phoenix::StatusCode Apply(SwerveControlRequestParameters parameters,
     std::array<SwerveModule, 4>& modules) override
   {
+    headingController.EnableContinuousInput(
+      -std::numbers::pi, std::numbers::pi);
+    headingController.SetTolerance(0.0349066);
     units::meters_per_second_t toApplyX = velocityX;
     units::meters_per_second_t toApplyY = velocityY;
     units::radians_per_second_t toApplyOmega

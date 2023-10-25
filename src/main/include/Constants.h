@@ -40,6 +40,10 @@ namespace drivebase {
     static constexpr double TRANSLATION_P = 10.0;
     static constexpr double TRANSLATION_I = 0.0;
     static constexpr double TRANSLATION_D = 0.0;
+
+    static constexpr double ROTATION_P = 10.0;
+    static constexpr double ROTATION_I = 0.0;
+    static constexpr double ROTATION_D = 0.0;
   } // namespace gains
 
   namespace can {
