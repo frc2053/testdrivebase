@@ -47,6 +47,9 @@ void SwerveModule::ConfigureDriveMotor(bool invertDrive)
     = constants::drivebase::physical::SLIP_CURRENT.to<double>();
   driveConfig.TorqueCurrent.PeakReverseTorqueCurrent
     = -constants::drivebase::physical::SLIP_CURRENT.to<double>();
+  driveConfig.CurrentLimits.StatorCurrentLimit
+    = constants::drivebase::physical::SLIP_CURRENT.to<double>();
+  driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
   driveConfig.MotorOutput.Inverted = invertDrive
     ? ctre::phoenix6::signals::InvertedValue::Clockwise_Positive
     : ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive;
