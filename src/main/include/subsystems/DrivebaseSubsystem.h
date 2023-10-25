@@ -22,7 +22,8 @@ public:
     std::function<std::unique_ptr<RequestTypes::SwerveRequest>()>
       requestSupplier);
 
-  frc2::CommandPtr CharacterizeSteerMotors();
+  frc2::CommandPtr CharacterizeSteerMotors(
+    std::function<bool()> nextStepButton);
 
   void Periodic() override;
   void SimulationPeriodic() override;
@@ -32,4 +33,14 @@ private:
   SwerveTelemetry telem{constants::drivebase::physical::MAX_DRIVE_SPEED};
   void SetupAutoBuilder();
   RequestTypes::ApplyChassisSpeeds autoRequest{};
+
+  // This is for characterization
+  wpi::json flModuleData{};
+  wpi::json frModuleData{};
+  wpi::json blModuleData{};
+  wpi::json brModuleData{};
+
+  units::volt_t quasistaticVolts = 0_V;
+  static constexpr auto quasistaticStep{0.25_V / 1_s};
+  units::volt_t dynamicStepVolts = 7_V;
 };

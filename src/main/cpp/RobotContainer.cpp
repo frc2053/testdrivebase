@@ -11,6 +11,8 @@ RobotContainer::RobotContainer() { ConfigureBindings(); }
 
 void RobotContainer::ConfigureBindings()
 {
+  frc::SmartDashboard::PutData("Characterize Modules", charModulesCmd.get());
+
   drivebaseSub.SetDefaultCommand(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentric>(
       drive

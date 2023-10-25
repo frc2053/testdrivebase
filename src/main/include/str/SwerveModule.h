@@ -6,9 +6,16 @@
 
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <wpi/json.h>
 
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
+
+struct CharData {
+  units::volt_t motorVoltage{0_V};
+  units::radian_t motorAngle{0_rad};
+  units::radians_per_second_t motorAngleVel{0_rad_per_s};
+};
 
 class SwerveModule {
 public:
@@ -23,6 +30,7 @@ public:
   std::array<ctre::phoenix6::BaseStatusSignal*, 4> GetSignals();
 
   void SetSteerMotorVolts(units::volt_t voltage);
+  CharData GetCharData();
 
   ctre::phoenix6::hardware::TalonFX driveMotor;
   ctre::phoenix6::hardware::TalonFX steerMotor;
@@ -43,6 +51,8 @@ private:
     = driveMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::turns_per_second_t> driveVelocitySig
     = driveMotor.GetVelocity();
+  ctre::phoenix6::StatusSignal<units::volt_t> steerVoltageSig
+    = steerMotor.GetMotorVoltage();
 
   ctre::phoenix6::controls::MotionMagicVoltage angleSetter{0_rad};
   ctre::phoenix6::controls::VelocityTorqueCurrentFOC velocityTorqueSetter{

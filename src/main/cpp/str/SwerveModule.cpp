@@ -210,3 +210,16 @@ void SwerveModule::SetSteerMotorVolts(units::volt_t voltage)
 {
   steerMotor.SetControl(identifySteerSetter.WithOutput(voltage));
 }
+
+CharData SwerveModule::GetCharData()
+{
+  ctre::phoenix::StatusCode status
+    = ctre::phoenix6::BaseStatusSignal::WaitForAll(
+      0_s, steerAngleSig, steerAngleVelSig, steerVoltageSig);
+
+  units::volt_t motorVoltage = steerVoltageSig.GetValue();
+  units::radian_t steerAngle = steerAngleSig.GetValue();
+  units::radians_per_second_t steerAngleVel = steerAngleVelSig.GetValue();
+
+  return CharData{motorVoltage, steerAngle, steerAngleVel};
+}

@@ -21,4 +21,6 @@ private:
   DrivebaseSubsystem drivebaseSub;
   RequestTypes::FieldCentric drive;
   RequestTypes::FieldCentricFacingAngle driveAtAngle;
+  frc2::CommandPtr charModulesCmd = drivebaseSub.CharacterizeSteerMotors(
+    [this] { return driverController.GetStartButtonPressed(); });
 };
