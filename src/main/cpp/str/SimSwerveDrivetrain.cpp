@@ -38,18 +38,18 @@ void SimSwerveDrivetrain::Update(units::second_t deltaTime,
 
     steerMotor.SetRawRotorPosition(modules[i].steerMotor.GetAngularPosition()
       * constants::drivebase::physical::STEER_GEARING);
-    steerMotor.SetRotorVelocity(modules[i].driveMotor.GetAngularVelocity()
-      / 60.0 * constants::drivebase::physical::STEER_GEARING);
+    steerMotor.SetRotorVelocity(modules[i].steerMotor.GetAngularVelocity()
+      * constants::drivebase::physical::STEER_GEARING);
     steerMotor.SetSupplyVoltage(supplyVoltage);
 
     encoder.SetRawPosition(modules[i].steerMotor.GetAngularPosition());
-    encoder.SetVelocity(modules[i].steerMotor.GetAngularVelocity() / 60.0);
+    encoder.SetVelocity(modules[i].steerMotor.GetAngularVelocity());
     encoder.SetSupplyVoltage(supplyVoltage);
 
     driveMotor.SetRawRotorPosition(modules[i].driveMotor.GetAngularPosition()
       * constants::drivebase::physical::DRIVE_GEARING);
     driveMotor.SetRotorVelocity(modules[i].driveMotor.GetAngularVelocity()
-      / 60.0 * constants::drivebase::physical::DRIVE_GEARING);
+      * constants::drivebase::physical::DRIVE_GEARING);
     driveMotor.SetSupplyVoltage(supplyVoltage);
 
     frc::SwerveModulePosition currentPosition
