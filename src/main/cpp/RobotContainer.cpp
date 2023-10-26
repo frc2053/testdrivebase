@@ -18,7 +18,7 @@ void RobotContainer::ConfigureBindings()
       drive
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
-        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .1)
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .2)
         .withVelocityY(-driverController.GetLeftX()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withRotationalRate(-driverController.GetRightX()
@@ -30,6 +30,7 @@ void RobotContainer::ConfigureBindings()
   driverController.A().WhileTrue(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
       driveAtAngle
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .2)
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withVelocityY(-driverController.GetLeftX()
@@ -40,6 +41,7 @@ void RobotContainer::ConfigureBindings()
   driverController.X().WhileTrue(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
       driveAtAngle
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .2)
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withVelocityY(-driverController.GetLeftX()
@@ -50,6 +52,7 @@ void RobotContainer::ConfigureBindings()
   driverController.B().WhileTrue(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
       driveAtAngle
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .2)
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withVelocityY(-driverController.GetLeftX()
@@ -60,6 +63,7 @@ void RobotContainer::ConfigureBindings()
   driverController.Y().WhileTrue(drivebaseSub.ApplyRequest([this] {
     return std::make_unique<RequestTypes::FieldCentricFacingAngle>(
       driveAtAngle
+        .withDeadband(constants::drivebase::physical::MAX_DRIVE_SPEED * .2)
         .withVelocityX(-driverController.GetLeftY()
           * constants::drivebase::physical::MAX_DRIVE_SPEED)
         .withVelocityY(-driverController.GetLeftX()
