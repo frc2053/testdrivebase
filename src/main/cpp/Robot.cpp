@@ -20,7 +20,9 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
 
 void Robot::DisabledInit() { }
 
-void Robot::DisabledPeriodic() { }
+void Robot::DisabledPeriodic() {
+  fmt::print("hello world!\n");
+ }
 
 void Robot::DisabledExit() { }
 
