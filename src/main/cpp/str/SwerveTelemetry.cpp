@@ -46,13 +46,5 @@ void SwerveTelemetry::Telemeterize(SwerveDriveState state)
     state.moduleStates[2].speed.value(),
     state.moduleStates[3].angle.Degrees().value(),
     state.moduleStates[3].speed.value()};
-  frc::SmartDashboard::PutNumberArray(
-    "AdvantageScope/SwerveStateActual", advantageScopeSwerveView);
-
-  double logValues[]
-    = {pose.X().value(), pose.Y().value(), pose.Rotation().Degrees().value()};
-  frc::DataLogManager::GetLog().AppendDoubleArray(
-    logEntry, logValues, frc::Timer::GetFPGATimestamp().value());
-  frc::DataLogManager::GetLog().AppendDouble(odomEntry,
-    state.odometryPeriod.value(), frc::Timer::GetFPGATimestamp().value());
+  swerveStatePub.Set(advantageScopeSwerveView);
 }
