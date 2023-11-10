@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <memory>
+#include <shared_mutex>
 #include <thread>
 
 #include <ctre/phoenix6/Pigeon2.hpp>
@@ -17,7 +18,6 @@
 #include "str/SimSwerveDrivetrain.h"
 #include "str/SwerveModule.h"
 #include "str/SwerveRequest.h"
-#include "str/shared_recursive_mutex.h"
 
 struct SwerveDriveState {
   int successfulDaqs{0};
@@ -88,8 +88,7 @@ protected:
   frc::Rotation2d fieldRelativeOffset{};
 
   std::thread odometryThread{&SwerveDrivebase::UpdateOdometry, this};
-  mtx::shared_recursive_global_mutex& lock{
-    mtx::shared_recursive_global_mutex::instance()};
+  std::shared_mutex lock;
 
   SwerveDriveState cachedState{};
 
