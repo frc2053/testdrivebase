@@ -7,6 +7,7 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <wpi/json.h>
+#include <wpi/sendable/SendableBuilder.h>
 
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
@@ -17,7 +18,16 @@ struct CharData {
   units::radians_per_second_t motorAngleVel{0_rad_per_s};
 };
 
-class SwerveModule {
+struct ModuleGains {
+  double kA{0};
+  double kV{0};
+  double kS{0};
+  double kP{0};
+  double kI{0};
+  double kD{0};
+};
+
+class SwerveModule : public wpi::Sendable {
 public:
   SwerveModule(int driveMotorId, int steerMotorId, int steerEncId,
     double steerEncOffset, bool invertDrive, bool invertSteer);
@@ -42,6 +52,14 @@ private:
   void ConfigureSteerMotor(bool invertSteer);
 
   frc::SwerveModulePosition internalState;
+  ModuleGains currentSteeringGains;
+  ModuleGains currentDrivingGains;
+
+  void SetSteeringGains(const ModuleGains& newGains);
+  ModuleGains GetSteeringGains();
+
+  void SetDrivingGains(const ModuleGains& newGains);
+  ModuleGains GetDrivingGains();
 
   ctre::phoenix6::StatusSignal<units::turn_t> steerAngleSig
     = steerMotor.GetPosition();
@@ -59,4 +77,6 @@ private:
     0_rad_per_s};
   ctre::phoenix6::controls::VoltageOut voltageOpenLoopSetter{0_V};
   ctre::phoenix6::controls::VoltageOut identifySteerSetter{0_V};
+
+  void InitSendable(wpi::SendableBuilder& builder);
 };
