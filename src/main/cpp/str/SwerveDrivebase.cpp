@@ -58,7 +58,7 @@ void SwerveDrivebase::UpdateOdometry()
     status
       = ctre::phoenix6::BaseStatusSignal::WaitForAll(2.0 / 250_Hz, allSignals);
 
-    std::unique_lock<std::shared_mutex> writeLock(lock);
+    std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
 
     lastTime = currentTime;
     currentTime = units::second_t{ctre::phoenix6::GetCurrentTimeSeconds()};
@@ -107,13 +107,13 @@ void SwerveDrivebase::UpdateOdometry()
 void SwerveDrivebase::SetControl(
   std::unique_ptr<RequestTypes::SwerveRequest> request)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   requestToApply = std::move(request);
 }
 
 void SwerveDrivebase::TareEverything()
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   for (int i = 0; i < 4; i++) {
     modules[i].ResetPosition();
     modulePostions[i] = modules[i].GetPosition(true);
@@ -123,27 +123,27 @@ void SwerveDrivebase::TareEverything()
 
 void SwerveDrivebase::SeedFieldRelative()
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   fieldRelativeOffset = GetState().pose.Rotation();
 }
 
 void SwerveDrivebase::SeedFieldRelative(frc::Pose2d location)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   fieldRelativeOffset = location.Rotation();
   odometry.ResetPosition(location.Rotation(), modulePostions, location);
 }
 
 SwerveDriveState SwerveDrivebase::GetState()
 {
-  std::shared_lock<std::shared_mutex> readLock(lock);
+  std::shared_lock<mtx::shared_recursive_global_mutex> readLock(lock);
   return cachedState;
 }
 
 void SwerveDrivebase::AddVisionMeasurement(frc::Pose2d visionRobotPose,
   units::second_t timestamp, wpi::array<double, 3> visionMeasurementStdDevs)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   odometry.AddVisionMeasurement(
     visionRobotPose, timestamp, visionMeasurementStdDevs);
 }
@@ -151,14 +151,14 @@ void SwerveDrivebase::AddVisionMeasurement(frc::Pose2d visionRobotPose,
 void SwerveDrivebase::AddVisionMeasurement(
   frc::Pose2d visionRobotPose, units::second_t timestamp)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   odometry.AddVisionMeasurement(visionRobotPose, timestamp);
 }
 
 void SwerveDrivebase::SetVisionMeasurementStdDevs(
   wpi::array<double, 3> visionMeasurementStdDevs)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
+  std::unique_lock<mtx::shared_recursive_global_mutex> writeLock(lock);
   odometry.SetVisionMeasurementStdDevs(visionMeasurementStdDevs);
 }
 
