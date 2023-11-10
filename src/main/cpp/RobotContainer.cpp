@@ -11,6 +11,10 @@ RobotContainer::RobotContainer() { ConfigureBindings(); }
 
 void RobotContainer::ConfigureBindings()
 {
+  autoChooser.AddOption("Test Auto", autos.GetTestAuto());
+
+  frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
+
   frc::SmartDashboard::PutData("Characterize Modules", charModulesCmd.get());
 
   drivebaseSub.SetDefaultCommand(drivebaseSub.ApplyRequest([this] {
@@ -70,5 +74,7 @@ void RobotContainer::ConfigureBindings()
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  return pathplanner::PathPlannerAuto("TestAuto").ToPtr();
+  return autoChooser.GetSelected()();
 }
+
+DrivebaseSubsystem& RobotContainer::GetDriveSub() { return drivebaseSub; }
