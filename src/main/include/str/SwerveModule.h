@@ -78,5 +78,5 @@ private:
   ctre::phoenix6::controls::VoltageOut voltageOpenLoopSetter{0_V};
   ctre::phoenix6::controls::VoltageOut identifySteerSetter{0_V};
 
-  void InitSendable(wpi::SendableBuilder& builder);
+  void InitSendable(wpi::SendableBuilder& builder) override;
 };
