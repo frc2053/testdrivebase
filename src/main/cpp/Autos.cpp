@@ -15,6 +15,14 @@ Autos::Autos(DrivebaseSubsystem* driveSub)
     "Print", frc2::PrintCommand("Test Command Print").ToPtr());
 }
 
+std::function<frc2::CommandPtr()> Autos::DoNothing()
+{
+  return [] {
+    return frc2::cmd::Print(
+      "WARNING: You probably selected the wrong auto mode!");
+  };
+}
+
 std::function<frc2::CommandPtr()> Autos::GetTestAuto()
 {
   return [] { return pathplanner::PathPlannerAuto{"TestAuto"}.ToPtr(); };

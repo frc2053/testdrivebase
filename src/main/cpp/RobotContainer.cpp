@@ -11,6 +11,7 @@ RobotContainer::RobotContainer() { ConfigureBindings(); }
 
 void RobotContainer::ConfigureBindings()
 {
+  autoChooser.SetDefaultOption("Do Nothing", autos.DoNothing());
   autoChooser.AddOption("Test Auto", autos.GetTestAuto());
 
   frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);

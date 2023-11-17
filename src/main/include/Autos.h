@@ -12,6 +12,7 @@ class Autos {
 public:
   explicit Autos(DrivebaseSubsystem* driveSub);
   std::function<frc2::CommandPtr()> GetTestAuto();
+  std::function<frc2::CommandPtr()> DoNothing();
 
 private:
   DrivebaseSubsystem* m_driveSub;
