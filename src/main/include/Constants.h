@@ -76,7 +76,7 @@ namespace drivebase {
       = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // L2 SDS
     static constexpr double STEER_GEARING
       = (50.0 / 14.0) * (10.0 / 60.0); // SDS Steer Ratio
-    static constexpr double DRIVE_STEER_COUPLING = 0.0;
+    static constexpr double DRIVE_STEER_COUPLING = (50.0 / 14.0);
     static constexpr double STEER_ENC_GEARING = (1.0);
     static constexpr units::ampere_t SLIP_CURRENT = 400_A;
     static constexpr units::meters_per_second_t MAX_DRIVE_SPEED{
