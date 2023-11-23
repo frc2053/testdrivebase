@@ -181,6 +181,10 @@ src/main/deploy/commit.txt
 #wpilogs
 *.wpilog
 
+#clangd cache
+/.cache
+compile_commands.json
+
 #sim stuff
 networktables.json
 simgui-ds.json
