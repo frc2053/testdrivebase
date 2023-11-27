@@ -110,6 +110,24 @@
             "key": "NT:/PathPlanner/targetPose",
             "sourceTypeIndex": 0,
             "sourceType": 5
+          },
+          {
+            "type": "Ghost",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/VisionEstimation",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Arrow (Center)",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/apriltag",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Arrow (Center)",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/visibleTargetPoses",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
           }
         ]
       ],
@@ -147,6 +165,24 @@
           {
             "type": "Green Ghost",
             "key": "NT:/PathPlanner/targetPose",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Vision Target",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/visibleTargetPoses",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Yellow Ghost",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/VisionEstimation",
+            "sourceTypeIndex": 0,
+            "sourceType": 5
+          },
+          {
+            "type": "Blue Cone (Front)",
+            "key": "NT:/SmartDashboard/VisionSystemSim-main/Sim Field/cameras",
             "sourceTypeIndex": 0,
             "sourceType": 5
           }
