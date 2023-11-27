@@ -16,7 +16,19 @@ void Robot::RobotInit()
   DataUtils::LogGitInfo();
 }
 
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+void Robot::RobotPeriodic()
+{
+  auto visionEst = m_vision.GetEstimatedGlobalPose();
+  if (visionEst.has_value()) {
+    auto est = visionEst.value();
+    auto estPose = est.estimatedPose.ToPose2d();
+    auto estStdDevs = m_vision.GetEstimationStdDevs(estPose);
+    m_container.GetDriveSub().AddVisionMeasurement(
+      est.estimatedPose.ToPose2d(), est.timestamp, estStdDevs);
+  }
+
+  frc2::CommandScheduler::GetInstance().Run();
+}
 
 void Robot::DisabledInit() { }
 
@@ -53,6 +65,14 @@ void Robot::TestInit() { frc2::CommandScheduler::GetInstance().CancelAll(); }
 void Robot::TestPeriodic() { }
 
 void Robot::TestExit() { }
+
+void Robot::SimulationPeriodic()
+{
+  m_vision.SimPeriodic(m_container.GetDriveSub().GetState().pose);
+  frc::Field2d& debugField = m_vision.GetSimDebugField();
+  debugField.GetObject("EstimatedRobot")
+    ->SetPose(m_container.GetDriveSub().GetState().pose);
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

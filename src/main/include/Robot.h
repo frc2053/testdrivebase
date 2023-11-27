@@ -10,6 +10,7 @@
 #include <optional>
 
 #include "RobotContainer.h"
+#include "Vision.h"
 #include "str/Alert.h"
 #include "str/SwerveModule.h"
 
@@ -29,6 +30,7 @@ public:
   void TestInit() override;
   void TestPeriodic() override;
   void TestExit() override;
+  void SimulationPeriodic() override;
 
 private:
   std::optional<frc2::CommandPtr> m_autonomousCommand;
@@ -36,4 +38,5 @@ private:
   alert::Alert canError{"CAN errors detected, robot may not be controllable.",
     alert::AlertType::CRITICAL};
   RobotContainer m_container;
+  Vision m_vision;
 };

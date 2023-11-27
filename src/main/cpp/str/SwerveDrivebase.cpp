@@ -145,11 +145,12 @@ SwerveDriveState SwerveDrivebase::GetState()
 }
 
 void SwerveDrivebase::AddVisionMeasurement(frc::Pose2d visionRobotPose,
-  units::second_t timestamp, wpi::array<double, 3> visionMeasurementStdDevs)
+  units::second_t timestamp, Eigen::Vector3d visionMeasurementStdDevs)
 {
   std::unique_lock<std::shared_mutex> writeLock(lock);
-  odometry.AddVisionMeasurement(
-    visionRobotPose, timestamp, visionMeasurementStdDevs);
+  wpi::array<double, 3> newStdDevs{visionMeasurementStdDevs(0),
+    visionMeasurementStdDevs(1), visionMeasurementStdDevs(2)};
+  odometry.AddVisionMeasurement(visionRobotPose, timestamp, newStdDevs);
 }
 
 void SwerveDrivebase::AddVisionMeasurement(
@@ -160,10 +161,12 @@ void SwerveDrivebase::AddVisionMeasurement(
 }
 
 void SwerveDrivebase::SetVisionMeasurementStdDevs(
-  wpi::array<double, 3> visionMeasurementStdDevs)
+  Eigen::Vector3d visionMeasurementStdDevs)
 {
   std::unique_lock<std::shared_mutex> writeLock(lock);
-  odometry.SetVisionMeasurementStdDevs(visionMeasurementStdDevs);
+  wpi::array<double, 3> newStdDevs{visionMeasurementStdDevs(0),
+    visionMeasurementStdDevs(1), visionMeasurementStdDevs(2)};
+  odometry.SetVisionMeasurementStdDevs(newStdDevs);
 }
 
 void SwerveDrivebase::UpdateSimState(

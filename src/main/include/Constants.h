@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <frc/apriltag/AprilTagFieldLayout.h>
+#include <frc/apriltag/AprilTagFields.h>
+#include <frc/geometry/Transform3d.h>
 #include <str/Units.h>
 #include <units/angular_velocity.h>
 #include <units/current.h>
@@ -16,6 +19,17 @@ static constexpr units::second_t ROBOT_DT = 0.02_s;
 namespace motor_info {
   static constexpr units::radians_per_second_t FALCON_FOC_FREE_SPEED = 6080_rpm;
 } // namespace motor_info
+
+namespace vision {
+  static const frc::Transform3d kRobotToCam{
+    frc::Translation3d{0.5_m, 0.0_m, 0.5_m},
+    frc::Rotation3d{0_rad, 0_rad, 0_rad}};
+  static const frc::AprilTagFieldLayout kTagLayout{
+    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2023ChargedUp)};
+
+  static const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
+  static const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
+} // namespace vision
 
 namespace drivebase {
 

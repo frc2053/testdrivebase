@@ -37,11 +37,10 @@ public:
   virtual void SeedFieldRelative(frc::Pose2d location);
   SwerveDriveState GetState();
   void AddVisionMeasurement(frc::Pose2d visionRobotPose,
-    units::second_t timestamp, wpi::array<double, 3> visionMeasurementStdDevs);
+    units::second_t timestamp, Eigen::Vector3d visionMeasurementStdDevs);
   void AddVisionMeasurement(
     frc::Pose2d visionRobotPose, units::second_t timestamp);
-  void SetVisionMeasurementStdDevs(
-    wpi::array<double, 3> visionMeasurementStdDevs);
+  void SetVisionMeasurementStdDevs(Eigen::Vector3d visionMeasurementStdDevs);
   void UpdateSimState(units::second_t dt, units::volt_t supplyVoltage);
   bool IsOdometryValid();
 
