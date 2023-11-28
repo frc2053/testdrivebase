@@ -68,8 +68,7 @@ void Robot::TestExit() { }
 
 void Robot::SimulationPeriodic()
 {
-  // Change to be get sim position?
-  m_vision.SimPeriodic(m_container.GetDriveSub().GetState().pose);
+  m_vision.SimPeriodic(m_container.GetDriveSub().GetSimPose());
   frc::Field2d& debugField = m_vision.GetSimDebugField();
   debugField.GetObject("EstimatedRobot")
     ->SetPose(m_container.GetDriveSub().GetState().pose);

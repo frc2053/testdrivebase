@@ -34,16 +34,16 @@ namespace vision {
 namespace drivebase {
 
   namespace gains {
-    static constexpr double DRIVE_KA = 0.0;
-    static constexpr double DRIVE_KV = 0.0;
-    static constexpr double DRIVE_KS = 0.0;
+    static constexpr double DRIVE_KA = 0.3;
+    static constexpr double DRIVE_KV = 2.5;
+    static constexpr double DRIVE_KS = 0.25;
     static constexpr double DRIVE_KP = 3.0;
     static constexpr double DRIVE_KI = 0.0;
     static constexpr double DRIVE_KD = 0.0;
 
-    static constexpr double STEER_KA = 0.0;
-    static constexpr double STEER_KV = 0.0;
-    static constexpr double STEER_KS = 0.0;
+    static constexpr double STEER_KA = 0.01;
+    static constexpr double STEER_KV = 0.25;
+    static constexpr double STEER_KS = 0.5;
     static constexpr double STEER_KP = 1.0;
     static constexpr double STEER_KI = 0.0;
     static constexpr double STEER_KD = 0.00;
@@ -58,6 +58,13 @@ namespace drivebase {
     static constexpr double ROTATION_P = 10.0;
     static constexpr double ROTATION_I = 0.0;
     static constexpr double ROTATION_D = 0.0;
+
+    static const frc::SimpleMotorFeedforward<units::meters> DRIVE_FF{
+      DRIVE_KS * 1_V, DRIVE_KV * (1_V / 1_mps), DRIVE_KA * (1_V / 1_mps_sq)};
+
+    static const frc::SimpleMotorFeedforward<units::radians> STEER_FF{
+      STEER_KS * 1_V, STEER_KV * (1_V / 1_rad_per_s),
+      STEER_KA * (1_V / 1_rad_per_s_sq)};
   } // namespace gains
 
   namespace can {

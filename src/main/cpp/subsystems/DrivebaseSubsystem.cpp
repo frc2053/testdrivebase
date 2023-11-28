@@ -29,7 +29,40 @@ void DrivebaseSubsystem::Periodic() { }
 
 void DrivebaseSubsystem::SimulationPeriodic()
 {
-  UpdateSimState(constants::ROBOT_DT, 12_V);
+  std::array<units::volt_t, 4> driveInputs;
+  std::array<units::volt_t, 4> steerInputs;
+  for (int i = 0; i < modules.size(); i++) {
+    driveInputs[i] = modules[i].GetDriveVoltage();
+    steerInputs[i] = modules[i].GetSteerVoltage();
+  }
+  simDrivetrain.SetDriveInputs(driveInputs);
+  simDrivetrain.SetSteerInputs(steerInputs);
+
+  simDrivetrain.Update(constants::ROBOT_DT);
+
+  auto driveStates = simDrivetrain.GetDriveStates();
+  auto steerStates = simDrivetrain.GetSteerStates();
+  totalCurrentDraw = 0_A;
+  std::array<units::ampere_t, 4> driveCurrents
+    = simDrivetrain.GetDriveCurrentDraw();
+  for (const auto& current : driveCurrents) {
+    totalCurrentDraw += current;
+  }
+  std::array<units::ampere_t, 4> steerCurrents
+    = simDrivetrain.GetSteerCurrentDraw();
+  for (const auto& current : steerCurrents) {
+    totalCurrentDraw += current;
+  }
+  for (int i = 0; i < modules.size(); i++) {
+    units::meter_t drivePos{driveStates[i](0, 0)};
+    units::meters_per_second_t driveRate{driveStates[i](1, 0)};
+    units::radian_t steerPos{steerStates[i](0, 0)};
+    units::radians_per_second_t steerRate{steerStates[i](1, 0)};
+    modules[i].SimulationUpdate(drivePos, driveRate, driveCurrents[i], steerPos,
+      steerRate, steerCurrents[i]);
+  }
+  gyroSim.SetRate(-simDrivetrain.GetOmega());
+  gyroSim.SetAngle(-simDrivetrain.GetPose().Rotation().Degrees());
 }
 
 void DrivebaseSubsystem::SeedFieldRelative(frc::Pose2d location)
