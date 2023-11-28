@@ -15,7 +15,7 @@
 #include <ctre/phoenix6/Pigeon2.hpp>
 
 #include "Constants.h"
-#include "str/SwerveDriveSim.h"
+#include "str/SimSwerveDrivetrain.h"
 #include "str/SwerveModule.h"
 #include "str/SwerveRequest.h"
 
@@ -91,12 +91,7 @@ protected:
 
   SwerveDriveState cachedState{};
 
-  SwerveDriveSim simDrivetrain{constants::drivebase::gains::DRIVE_FF,
-    frc::DCMotor::Falcon500FOC(1),
-    constants::drivebase::physical::DRIVE_GEARING,
-    constants::drivebase::physical::WHEEL_DIAM / 2,
-    constants::drivebase::gains::STEER_FF, frc::DCMotor::Falcon500FOC(1),
-    constants::drivebase::physical::STEER_GEARING, kinematics};
+  SimSwerveDrivetrain simDrivetrain{kinematics, imu};
 
   std::unique_ptr<RequestTypes::SwerveRequest> requestToApply
     = std::make_unique<RequestTypes::Idle>();

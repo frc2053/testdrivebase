@@ -118,7 +118,6 @@ void SwerveDrivebase::SetControl(
 void SwerveDrivebase::TareEverything()
 {
   std::unique_lock<std::shared_mutex> writeLock(lock);
-  simDrivetrain.Reset(frc::Pose2d{}, false);
   for (int i = 0; i < 4; i++) {
     modules[i].ResetPosition();
     modulePostions[i] = modules[i].GetPosition(true);
@@ -136,7 +135,6 @@ void SwerveDrivebase::SeedFieldRelative(frc::Pose2d location)
 {
   std::unique_lock<std::shared_mutex> writeLock(lock);
   fieldRelativeOffset = location.Rotation();
-  simDrivetrain.Reset(location, false);
   odometry.ResetPosition(location.Rotation(), modulePostions, location);
 }
 
@@ -169,6 +167,12 @@ void SwerveDrivebase::SetVisionMeasurementStdDevs(
   wpi::array<double, 3> newStdDevs{visionMeasurementStdDevs(0),
     visionMeasurementStdDevs(1), visionMeasurementStdDevs(2)};
   odometry.SetVisionMeasurementStdDevs(newStdDevs);
+}
+
+void SwerveDrivebase::UpdateSimState(
+  units::second_t dt, units::volt_t supplyVoltage)
+{
+  simDrivetrain.Update(dt, supplyVoltage, modules);
 }
 
 bool SwerveDrivebase::IsOdometryValid() { return validOdom; }

@@ -29,15 +29,10 @@ public:
   void SimulationPeriodic() override;
   void SeedFieldRelative(frc::Pose2d location) override;
 
-  frc::Pose2d GetSimPose() const { return simDrivetrain.GetPose(); }
-  units::ampere_t GetCurrentDraw() const { return totalCurrentDraw; }
-
 private:
   SwerveTelemetry telem{constants::drivebase::physical::MAX_DRIVE_SPEED};
   void SetupAutoBuilder();
   RequestTypes::ApplyChassisSpeeds autoRequest{};
-
-  units::ampere_t totalCurrentDraw{0_A};
 
   // This is for characterization
   wpi::json flModuleData{};
