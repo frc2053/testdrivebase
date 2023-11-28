@@ -268,6 +268,12 @@ CharData SwerveModule::GetCharData()
   return CharData{motorVoltage, steerAngle, steerAngleVel};
 }
 
+std::array<ctre::phoenix6::StatusSignal<units::volt_t>*, 2>
+SwerveModule::GetVoltageSignals()
+{
+  return {&driveVoltageSig, &steerVoltageSig};
+}
+
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
 {
   builder.SetSmartDashboardType("SwerveModule");

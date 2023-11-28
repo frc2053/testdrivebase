@@ -34,19 +34,19 @@ namespace vision {
 namespace drivebase {
 
   namespace gains {
-    static constexpr double DRIVE_KA = 0.0;
-    static constexpr double DRIVE_KV = 0.0;
-    static constexpr double DRIVE_KS = 0.0;
+    static constexpr double DRIVE_KA = 0.3;
+    static constexpr double DRIVE_KV = 2.5;
+    static constexpr double DRIVE_KS = 0.25;
     static constexpr double DRIVE_KP = 3.0;
     static constexpr double DRIVE_KI = 0.0;
     static constexpr double DRIVE_KD = 0.0;
 
-    static constexpr double STEER_KA = 0.0;
-    static constexpr double STEER_KV = 0.0;
-    static constexpr double STEER_KS = 0.0;
-    static constexpr double STEER_KP = 1.0;
+    static constexpr double STEER_KA = 0.01;
+    static constexpr double STEER_KV = 0.25;
+    static constexpr double STEER_KS = 0.5;
+    static constexpr double STEER_KP = 20.0;
     static constexpr double STEER_KI = 0.0;
-    static constexpr double STEER_KD = 0.00;
+    static constexpr double STEER_KD = 0.25;
 
     static constexpr double STEER_MOTION_MAGIC_ACCEL = 100.0;
     static constexpr double STEER_MOTION_MAGIC_CRUISE_VEL = 10.0;
@@ -81,11 +81,11 @@ namespace drivebase {
   } // namespace can
 
   namespace physical {
-    static constexpr auto WHEELBASE_LENGTH
+    static constexpr units::meter_t WHEELBASE_LENGTH
       = 25_in; // From front wheel to back wheel
-    static constexpr auto WHEELBASE_WIDTH
+    static constexpr units::meter_t WHEELBASE_WIDTH
       = 25_in; // From left wheel to right wheel
-    static constexpr auto WHEEL_DIAM = 4_in;
+    static constexpr units::meter_t WHEEL_DIAM = 4_in;
     static constexpr double DRIVE_GEARING
       = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // L2 SDS
     static constexpr double STEER_GEARING

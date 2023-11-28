@@ -38,6 +38,8 @@ public:
   frc::SwerveModuleState GetCurrentState();
   void ResetPosition();
   std::array<ctre::phoenix6::BaseStatusSignal*, 4> GetSignals();
+  std::array<ctre::phoenix6::StatusSignal<units::volt_t>*, 2>
+  GetVoltageSignals();
 
   void SetSteerMotorVolts(units::volt_t voltage);
   CharData GetCharData();
@@ -69,6 +71,8 @@ private:
     = driveMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::turns_per_second_t> driveVelocitySig
     = driveMotor.GetVelocity();
+  ctre::phoenix6::StatusSignal<units::volt_t> driveVoltageSig
+    = driveMotor.GetMotorVoltage();
   ctre::phoenix6::StatusSignal<units::volt_t> steerVoltageSig
     = steerMotor.GetMotorVoltage();
 
