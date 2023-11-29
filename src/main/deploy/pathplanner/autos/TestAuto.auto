@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.8457794339560063,
-      "y": 0.5162526246340522
+      "x": 1.8314390832684142,
+      "y": 0.5162526246362076
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -15,6 +15,12 @@
           "type": "path",
           "data": {
             "pathName": "TestPath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Print"
           }
         }
       ]

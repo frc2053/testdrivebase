@@ -7,9 +7,23 @@
 #include <ctre/phoenix/StatusCodes.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
+#include "Constants.h"
 #include "str/CTREPIDController.h"
 #include "str/SwerveModule.h"
+
+static void LogDesiredSwerveState(
+  std::array<frc::SwerveModuleState, 4> desiredStates)
+{
+  std::array<double, 8> advantageScopeSwerveView{
+    desiredStates[0].angle.Degrees().value(), desiredStates[0].speed.value(),
+    desiredStates[1].angle.Degrees().value(), desiredStates[1].speed.value(),
+    desiredStates[2].angle.Degrees().value(), desiredStates[2].speed.value(),
+    desiredStates[3].angle.Degrees().value(), desiredStates[3].speed.value()};
+  frc::SmartDashboard::PutNumberArray(
+    "AdvantageScope/SwerveStateDesired", advantageScopeSwerveView);
+};
 
 namespace RequestTypes {
 struct SwerveControlRequestParameters {
@@ -85,6 +99,7 @@ public:
       toApplyX, toApplyY, toApplyOmega, parameters.currentPose.Rotation());
     auto states = parameters.kinematics.ToSwerveModuleStates(
       speeds, frc::Translation2d{});
+    LogDesiredSwerveState(states);
     for (size_t i = 0; i < modules.size(); i++) {
       modules[i].GoToState(states[i], isOpenLoop);
     }
@@ -139,10 +154,15 @@ public:
   units::meters_per_second_t deadband = 0_mps;
   units::radians_per_second_t rotationalDeadband = 0_rad_per_s;
   bool isOpenLoop = true;
-  CTREPIDController headingController{1, 0, 0};
+  CTREPIDController headingController{constants::drivebase::gains::ROTATION_P,
+    constants::drivebase::gains::ROTATION_I,
+    constants::drivebase::gains::ROTATION_D};
   ctre::phoenix::StatusCode Apply(SwerveControlRequestParameters parameters,
     std::array<SwerveModule, 4>& modules) override
   {
+    headingController.EnableContinuousInput(
+      -std::numbers::pi, std::numbers::pi);
+    headingController.SetTolerance(0.0349066);
     units::meters_per_second_t toApplyX = velocityX;
     units::meters_per_second_t toApplyY = velocityY;
     units::radians_per_second_t toApplyOmega
@@ -161,6 +181,7 @@ public:
       toApplyX, toApplyY, toApplyOmega, parameters.currentPose.Rotation());
     auto states = parameters.kinematics.ToSwerveModuleStates(
       speeds, frc::Translation2d{});
+    LogDesiredSwerveState(states);
     for (size_t i = 0; i < modules.size(); i++) {
       modules[i].GoToState(states[i], isOpenLoop);
     }
@@ -261,6 +282,7 @@ public:
       = frc::ChassisSpeeds{toApplyX, toApplyY, toApplyOmega};
     auto states = parameters.kinematics.ToSwerveModuleStates(
       speeds, frc::Translation2d{});
+    LogDesiredSwerveState(states);
     for (size_t i = 0; i < modules.size(); i++) {
       modules[i].GoToState(states[i], isOpenLoop);
     }
@@ -317,6 +339,7 @@ public:
   {
     auto states
       = parameters.kinematics.ToSwerveModuleStates(speeds, centerOfRotation);
+    LogDesiredSwerveState(states);
     for (size_t i = 0; i < modules.size(); i++) {
       modules[i].GoToState(states[i], isOpenLoop);
     }

@@ -8,52 +8,95 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.763561877746561,
-        "y": 1.5200771725357505
+        "x": 2.118604381935975,
+        "y": 0.5162526246362076
       },
       "isLocked": false
     },
     {
       "anchor": {
-        "x": 2.505435565429536,
-        "y": 4.588912218971496
+        "x": 6.649796913189533,
+        "y": 0.960803495846707
       },
       "prevControl": {
-        "x": 1.0912220030564392,
-        "y": 4.588912218971496
+        "x": 5.888033291527866,
+        "y": 0.9686990623640249
       },
       "nextControl": {
-        "x": 3.9824916859102917,
-        "y": 4.588912218971496
+        "x": 7.4115605348512,
+        "y": 0.9529079293293891
       },
       "isLocked": false
     },
     {
       "anchor": {
-        "x": 7.0,
-        "y": 1.0
+        "x": 6.047502184449808,
+        "y": 4.8470385312863655
       },
       "prevControl": {
-        "x": 7.252091641925946,
-        "y": 5.162526246342663
+        "x": 7.0795215858784735,
+        "y": 5.108677252775323
+      },
+      "nextControl": {
+        "x": 5.029337285865985,
+        "y": 4.58891221896934
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 2.4193934613271737,
+        "y": 4.6175929203378985
+      },
+      "prevControl": {
+        "x": 3.5666215160695085,
+        "y": 4.674954323075015
       },
       "nextControl": null,
       "isLocked": false
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.6500000000000001,
+      "rotationDegrees": 50.0
+    },
+    {
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": 0
+    }
+  ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "PrintHere",
+      "waypointRelativePos": 1.5,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Print"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3,
     "maxAngularVelocity": 540,
     "maxAngularAcceleration": 720
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -83.0806188783578
+    "rotation": -98.67317404787977
   },
   "reversed": false,
-  "folder": null
+  "folder": null,
+  "previewStartingState": null
 }

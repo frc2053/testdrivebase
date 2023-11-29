@@ -32,7 +32,7 @@ namespace drivebase {
     static constexpr double STEER_KS = 0.0;
     static constexpr double STEER_KP = 1.0;
     static constexpr double STEER_KI = 0.0;
-    static constexpr double STEER_KD = 0.05;
+    static constexpr double STEER_KD = 0.00;
 
     static constexpr double STEER_MOTION_MAGIC_ACCEL = 100.0;
     static constexpr double STEER_MOTION_MAGIC_CRUISE_VEL = 10.0;
@@ -40,6 +40,10 @@ namespace drivebase {
     static constexpr double TRANSLATION_P = 10.0;
     static constexpr double TRANSLATION_I = 0.0;
     static constexpr double TRANSLATION_D = 0.0;
+
+    static constexpr double ROTATION_P = 10.0;
+    static constexpr double ROTATION_I = 0.0;
+    static constexpr double ROTATION_D = 0.0;
   } // namespace gains
 
   namespace can {
@@ -72,12 +76,14 @@ namespace drivebase {
       = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // L2 SDS
     static constexpr double STEER_GEARING
       = (50.0 / 14.0) * (10.0 / 60.0); // SDS Steer Ratio
-    static constexpr double DRIVE_STEER_COUPLING = 1.0;
+    static constexpr double DRIVE_STEER_COUPLING = (50.0 / 14.0);
     static constexpr double STEER_ENC_GEARING = (1.0);
     static constexpr units::ampere_t SLIP_CURRENT = 400_A;
     static constexpr units::meters_per_second_t MAX_DRIVE_SPEED{
       str::Units::ConvertAngularVelocityToLinearVelocity(
         motor_info::FALCON_FOC_FREE_SPEED / DRIVE_GEARING, WHEEL_DIAM / 2)};
+    static constexpr units::degrees_per_second_t MAX_ROTATION_SPEED{
+      360_deg_per_s};
     static constexpr double FL_ENC_OFFSET = 0;
     static constexpr double FR_ENC_OFFSET = 0;
     static constexpr double BL_ENC_OFFSET = 0;

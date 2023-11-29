@@ -15,6 +15,10 @@ SwerveDrivebase::SwerveDrivebase(
   std::function<void(SwerveDriveState)> telemFunc)
   : telemetryFunction(telemFunc)
 {
+  frc::SmartDashboard::PutData("FL Module Tuner", &modules[0]);
+  frc::SmartDashboard::PutData("FR Module Tuner", &modules[1]);
+  frc::SmartDashboard::PutData("BL Module Tuner", &modules[2]);
+  frc::SmartDashboard::PutData("BR Module Tuner", &modules[3]);
 }
 
 SwerveDrivebase::~SwerveDrivebase()
@@ -51,8 +55,6 @@ void SwerveDrivebase::UpdateOdometry()
   for (ctre::phoenix6::BaseStatusSignal* sig : allSignals) {
     sig->SetUpdateFrequency(250_Hz);
   }
-
-  fmt::print("About to go infinite >:)\n");
 
   // runs in seperate thread so we chillin'
   while (true) {

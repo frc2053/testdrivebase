@@ -16,6 +16,20 @@ SwerveModule::SwerveModule(int driveMotorId, int steerMotorId, int steerEncId,
   : driveMotor{driveMotorId, "*"}
   , steerMotor{steerMotorId, "*"}
   , steerEnc{steerEncId, "*"}
+  , currentSteeringGains{constants::drivebase::gains::STEER_KA,
+      constants::drivebase::gains::STEER_KV,
+      constants::drivebase::gains::STEER_KS,
+      constants::drivebase::gains::STEER_KP,
+      constants::drivebase::gains::STEER_KI,
+      constants::drivebase::gains::STEER_KD}
+  , currentDrivingGains{
+      constants::drivebase::gains::DRIVE_KA,
+      constants::drivebase::gains::DRIVE_KV,
+      constants::drivebase::gains::DRIVE_KS,
+      constants::drivebase::gains::DRIVE_KP,
+      constants::drivebase::gains::DRIVE_KI,
+      constants::drivebase::gains::DRIVE_KD,
+    }
 {
   ConfigureDriveMotor(invertDrive);
   ConfigureSteerEncoder(steerEncOffset);
@@ -31,12 +45,12 @@ void SwerveModule::ConfigureDriveMotor(bool invertDrive)
   ctre::phoenix6::configs::TalonFXConfiguration driveConfig{};
 
   ctre::phoenix6::configs::Slot0Configs driveSlotConfig{};
-  driveSlotConfig.kV = constants::drivebase::gains::DRIVE_KV;
-  driveSlotConfig.kA = constants::drivebase::gains::DRIVE_KA;
-  driveSlotConfig.kS = constants::drivebase::gains::DRIVE_KS;
-  driveSlotConfig.kP = constants::drivebase::gains::DRIVE_KP;
-  driveSlotConfig.kI = constants::drivebase::gains::DRIVE_KI;
-  driveSlotConfig.kD = constants::drivebase::gains::DRIVE_KD;
+  driveSlotConfig.kV = currentDrivingGains.kV;
+  driveSlotConfig.kA = currentDrivingGains.kA;
+  driveSlotConfig.kS = currentDrivingGains.kS;
+  driveSlotConfig.kP = currentDrivingGains.kP;
+  driveSlotConfig.kI = currentDrivingGains.kI;
+  driveSlotConfig.kD = currentDrivingGains.kD;
   driveConfig.Slot0 = driveSlotConfig;
 
   driveConfig.MotorOutput.NeutralMode
@@ -47,6 +61,9 @@ void SwerveModule::ConfigureDriveMotor(bool invertDrive)
     = constants::drivebase::physical::SLIP_CURRENT.to<double>();
   driveConfig.TorqueCurrent.PeakReverseTorqueCurrent
     = -constants::drivebase::physical::SLIP_CURRENT.to<double>();
+  driveConfig.CurrentLimits.StatorCurrentLimit
+    = constants::drivebase::physical::SLIP_CURRENT.to<double>();
+  driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
   driveConfig.MotorOutput.Inverted = invertDrive
     ? ctre::phoenix6::signals::InvertedValue::Clockwise_Positive
     : ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive;
@@ -85,12 +102,12 @@ void SwerveModule::ConfigureSteerMotor(bool invertSteer)
   ctre::phoenix6::configs::TalonFXConfiguration steerConfig{};
 
   ctre::phoenix6::configs::Slot0Configs steerSlotConfig{};
-  steerSlotConfig.kV = constants::drivebase::gains::STEER_KV;
-  steerSlotConfig.kA = constants::drivebase::gains::STEER_KA;
-  steerSlotConfig.kS = constants::drivebase::gains::STEER_KS;
-  steerSlotConfig.kP = constants::drivebase::gains::STEER_KP;
-  steerSlotConfig.kI = constants::drivebase::gains::STEER_KI;
-  steerSlotConfig.kD = constants::drivebase::gains::STEER_KD;
+  steerSlotConfig.kV = currentSteeringGains.kV;
+  steerSlotConfig.kA = currentSteeringGains.kA;
+  steerSlotConfig.kS = currentSteeringGains.kS;
+  steerSlotConfig.kP = currentSteeringGains.kP;
+  steerSlotConfig.kI = currentSteeringGains.kI;
+  steerSlotConfig.kD = currentSteeringGains.kD;
   steerConfig.Slot0 = steerSlotConfig;
 
   steerConfig.MotorOutput.NeutralMode
@@ -120,6 +137,36 @@ void SwerveModule::ConfigureSteerMotor(bool invertSteer)
       "Swerve Module ConfigureSteerMotor() status was OK");
   }
 }
+
+void SwerveModule::SetSteeringGains(const ModuleGains& newGains)
+{
+  currentSteeringGains = newGains;
+  ctre::phoenix6::configs::Slot0Configs newConfig{};
+  newConfig.kA = currentSteeringGains.kA;
+  newConfig.kV = currentSteeringGains.kV;
+  newConfig.kS = currentSteeringGains.kS;
+  newConfig.kP = currentSteeringGains.kP;
+  newConfig.kI = currentSteeringGains.kI;
+  newConfig.kD = currentSteeringGains.kD;
+  steerMotor.GetConfigurator().Apply(newConfig);
+}
+
+ModuleGains SwerveModule::GetSteeringGains() { return currentSteeringGains; }
+
+void SwerveModule::SetDrivingGains(const ModuleGains& newGains)
+{
+  currentDrivingGains = newGains;
+  ctre::phoenix6::configs::Slot0Configs newConfig{};
+  newConfig.kA = currentDrivingGains.kA;
+  newConfig.kV = currentDrivingGains.kV;
+  newConfig.kS = currentDrivingGains.kS;
+  newConfig.kP = currentDrivingGains.kP;
+  newConfig.kI = currentDrivingGains.kI;
+  newConfig.kD = currentDrivingGains.kD;
+  driveMotor.GetConfigurator().Apply(newConfig);
+}
+
+ModuleGains SwerveModule::GetDrivingGains() { return currentDrivingGains; }
 
 frc::SwerveModulePosition SwerveModule::GetPosition(bool refresh)
 {
@@ -201,4 +248,118 @@ std::array<ctre::phoenix6::BaseStatusSignal*, 4> SwerveModule::GetSignals()
 {
   return {
     &drivePositionSig, &driveVelocitySig, &steerAngleSig, &steerAngleVelSig};
+}
+
+void SwerveModule::SetSteerMotorVolts(units::volt_t voltage)
+{
+  steerMotor.SetControl(identifySteerSetter.WithOutput(voltage));
+}
+
+CharData SwerveModule::GetCharData()
+{
+  ctre::phoenix::StatusCode status
+    = ctre::phoenix6::BaseStatusSignal::WaitForAll(
+      0_s, steerAngleSig, steerAngleVelSig, steerVoltageSig);
+
+  units::volt_t motorVoltage = steerVoltageSig.GetValue();
+  units::radian_t steerAngle = steerAngleSig.GetValue();
+  units::radians_per_second_t steerAngleVel = steerAngleVelSig.GetValue();
+
+  return CharData{motorVoltage, steerAngle, steerAngleVel};
+}
+
+void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
+{
+  builder.SetSmartDashboardType("SwerveModule");
+  builder.AddDoubleProperty(
+    "Drive kA", [this] { return currentDrivingGains.kA; },
+    [this](double newKa) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kA = newKa;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kA", [this] { return currentDrivingGains.kA; },
+    [this](double newKa) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kA = newKa;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kV", [this] { return currentDrivingGains.kV; },
+    [this](double newKv) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kV = newKv;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kS", [this] { return currentDrivingGains.kS; },
+    [this](double newKs) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kS = newKs;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kP", [this] { return currentDrivingGains.kP; },
+    [this](double newKp) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kP = newKp;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kI", [this] { return currentDrivingGains.kI; },
+    [this](double newKi) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kI = newKi;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Drive kD", [this] { return currentDrivingGains.kD; },
+    [this](double newKd) {
+      ModuleGains newGains = GetDrivingGains();
+      newGains.kD = newKd;
+      SetDrivingGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kA", [this] { return currentSteeringGains.kA; },
+    [this](double newKa) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kA = newKa;
+      SetSteeringGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kV", [this] { return currentSteeringGains.kV; },
+    [this](double newKv) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kV = newKv;
+      SetSteeringGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kS", [this] { return currentSteeringGains.kS; },
+    [this](double newKs) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kS = newKs;
+      SetSteeringGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kP", [this] { return currentSteeringGains.kP; },
+    [this](double newKp) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kP = newKp;
+      SetSteeringGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kI", [this] { return currentSteeringGains.kI; },
+    [this](double newKi) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kI = newKi;
+      SetSteeringGains(newGains);
+    });
+  builder.AddDoubleProperty(
+    "Steer kD", [this] { return currentSteeringGains.kD; },
+    [this](double newKd) {
+      ModuleGains newGains = GetSteeringGains();
+      newGains.kD = newKd;
+      SetSteeringGains(newGains);
+    });
 }

@@ -1,7 +1,7 @@
 plugins {
     id "cpp"
     id "google-test-test-suite"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1-beta-2"
+    id "edu.wpi.first.GradleRIO" version "2024.1.1-beta-3"
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -139,3 +139,27 @@ tasks.register("writeCommitHash") {
 
 deploy.targets.roborio.artifacts.frcStaticFileDeploy.dependsOn(writeCommitHash)
 deploy.targets.roborio.artifacts.frcStaticFileDeploy.dependsOn(writeBranchName)
+
+if (project.hasProperty("asan")) {
+  nativeUtils.platformConfigs.named("linuxx86-64").configure {
+    it.cppCompiler.args.add('-g3')
+    it.cppCompiler.args.add('-fsanitize=address')
+    it.linker.args.add('-fsanitize=address')
+  }
+}
+
+if (project.hasProperty("tsan")) {
+  nativeUtils.platformConfigs.named("linuxx86-64").configure {
+    it.cppCompiler.args.add('-g3')
+    it.cppCompiler.args.add('-fsanitize=thread')
+    it.linker.args.add('-fsanitize=thread')
+  }
+}
+
+if (project.hasProperty("ubsan")) {
+  nativeUtils.platformConfigs.named("linuxx86-64").configure {
+    it.cppCompiler.args.add('-g3')
+    it.cppCompiler.args.add('-fsanitize=undefined')
+    it.linker.args.add('-fsanitize=undefined')
+  }
+}

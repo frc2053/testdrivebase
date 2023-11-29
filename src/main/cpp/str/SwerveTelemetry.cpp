@@ -37,17 +37,14 @@ void SwerveTelemetry::Telemeterize(SwerveDriveState state)
   velocityY.Set(velocities.Y().value());
   odomPeriod.Set(1.0 / state.odometryPeriod.value());
 
-  for (size_t i = 0; i < 4; i++) {
-    moduleSpeedVis[i]->SetAngle(state.moduleStates[i].angle.Degrees());
-    moduleDirections[i]->SetLength(
-      state.moduleStates[i].speed / (2 * maximumSpeed));
-    frc::SmartDashboard::PutData("Module " + std::to_string(i), &moduleVis[i]);
-  }
-
-  double logValues[]
-    = {pose.X().value(), pose.Y().value(), pose.Rotation().Degrees().value()};
-  frc::DataLogManager::GetLog().AppendDoubleArray(
-    logEntry, logValues, frc::Timer::GetFPGATimestamp().value());
-  frc::DataLogManager::GetLog().AppendDouble(odomEntry,
-    state.odometryPeriod.value(), frc::Timer::GetFPGATimestamp().value());
+  std::array<double, 8> advantageScopeSwerveView{
+    state.moduleStates[0].angle.Degrees().value(),
+    state.moduleStates[0].speed.value(),
+    state.moduleStates[1].angle.Degrees().value(),
+    state.moduleStates[1].speed.value(),
+    state.moduleStates[2].angle.Degrees().value(),
+    state.moduleStates[2].speed.value(),
+    state.moduleStates[3].angle.Degrees().value(),
+    state.moduleStates[3].speed.value()};
+  swerveStatePub.Set(advantageScopeSwerveView);
 }

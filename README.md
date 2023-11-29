@@ -9,7 +9,7 @@ This repo holds our offseason test drivebase code. Our test drivebase is a swerv
 
 ## Prerequisites
 - Python 3 (not installed from Windows store. Please install from Python website)
-- Version [2024.1.1 Beta 2](https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1-beta-2) of the WPILib installer installed.
+- Version [2024.1.1 Beta 3](https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1-beta-3) of the WPILib installer installed.
 - Visual Studio 2022 with C++ workload
 
 ## Install steps: 
@@ -22,12 +22,20 @@ This repo holds our offseason test drivebase code. Our test drivebase is a swerv
     `pip install -r requirements.txt`
 - Install the pre-commit hooks for formatting
     `pre-commit install`
+- Disable the C++ extension
+    Go to extensions tab right click on C++ and click disable
 - Install these vscode extensions:
     [Python](vscode:extension/ms-python.python)
     [Run On Save](vscode:extension/emeraldwalk.RunOnSave)
+    [Clangd](vscode:extension/llvm-vs-code-extensions.vscode-clangd)
 
 ## Build steps:
 - To build the code, press Ctrl+Shift+P and search for "Build Robot Code". This will build the robot code for the robot, as well as simulation (desktop).
+
+## Setting up autocomplete
+- After building, run the python script:
+    `python rioCDGen.py`
+- Restart VSCode
 
 ## To run:
 - To run in simulation, press Ctrl+Shift+P and search for "Simulate Robot Code". This will launch the simulation.
