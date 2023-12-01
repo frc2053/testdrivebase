@@ -22,7 +22,7 @@
 class SwerveTelemetry {
 public:
   explicit SwerveTelemetry(units::meters_per_second_t maxSpeed);
-  void Telemeterize(SwerveDriveState state);
+  void Telemeterize(const SwerveDriveState& state);
 
 private:
   units::meters_per_second_t maximumSpeed;

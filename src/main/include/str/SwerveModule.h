@@ -31,7 +31,7 @@ class SwerveModule : public wpi::Sendable {
 public:
   SwerveModule(int driveMotorId, int steerMotorId, int steerEncId,
     double steerEncOffset, bool invertDrive, bool invertSteer);
-  void GoToState(frc::SwerveModuleState state, bool openLoop);
+  void GoToState(const frc::SwerveModuleState& state, bool openLoop);
 
   frc::SwerveModulePosition GetPosition(bool refresh);
   frc::SwerveModulePosition GetCachedPosition();

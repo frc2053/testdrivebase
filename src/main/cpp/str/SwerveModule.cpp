@@ -200,7 +200,7 @@ frc::SwerveModulePosition SwerveModule::GetPosition(bool refresh)
   return internalState;
 }
 
-void SwerveModule::GoToState(frc::SwerveModuleState state, bool openLoop)
+void SwerveModule::GoToState(const frc::SwerveModuleState& state, bool openLoop)
 {
   frc::SwerveModuleState optimizedState
     = frc::SwerveModuleState::Optimize(state, internalState.angle);

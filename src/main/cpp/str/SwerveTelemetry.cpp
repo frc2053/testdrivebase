@@ -14,7 +14,7 @@ SwerveTelemetry::SwerveTelemetry(units::meters_per_second_t maxSpeed)
 {
 }
 
-void SwerveTelemetry::Telemeterize(SwerveDriveState state)
+void SwerveTelemetry::Telemeterize(const SwerveDriveState& state)
 {
   frc::Pose2d pose = state.pose;
   fieldTypePub.Set("Field2d");
