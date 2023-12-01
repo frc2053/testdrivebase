@@ -34,7 +34,6 @@ void DrivebaseSubsystem::SimulationPeriodic()
 
 void DrivebaseSubsystem::SeedFieldRelative(frc::Pose2d location)
 {
-  std::unique_lock<std::shared_mutex> writeLock(lock);
   odometry.ResetPosition(
     frc::Rotation2d{imu.GetYaw().GetValue()}, modulePostions, location);
 }

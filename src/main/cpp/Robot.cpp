@@ -14,6 +14,10 @@ void Robot::RobotInit()
 {
   DataUtils::SetupDataLogging();
   DataUtils::LogGitInfo();
+
+  m_container.GetDriveSub().SetupOdomStuff();
+  AddPeriodic(
+    [this]() { m_container.GetDriveSub().UpdateOdometry(); }, 1 / 250_Hz, 0_s);
 }
 
 void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }

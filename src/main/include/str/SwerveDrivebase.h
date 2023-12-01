@@ -5,6 +5,8 @@
 #pragma once
 
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
+#include <frc/filter/LinearFilter.h>
+#include <frc/filter/MedianFilter.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 
 #include <functional>
@@ -30,7 +32,7 @@ struct SwerveDriveState {
 class SwerveDrivebase {
 public:
   explicit SwerveDrivebase(std::function<void(SwerveDriveState)> telemFunc);
-  virtual ~SwerveDrivebase();
+  virtual ~SwerveDrivebase() = default;
   void SetControl(std::unique_ptr<RequestTypes::SwerveRequest> request);
   void TareEverything();
   void SeedFieldRelative();
@@ -44,10 +46,10 @@ public:
     wpi::array<double, 3> visionMeasurementStdDevs);
   void UpdateSimState(units::second_t dt, units::volt_t supplyVoltage);
   bool IsOdometryValid();
-
-protected:
+  void SetupOdomStuff();
   void UpdateOdometry();
 
+protected:
   ctre::phoenix6::hardware::Pigeon2 imu{constants::drivebase::can::IMU, "*"};
   std::array<SwerveModule, 4> modules{
     SwerveModule{constants::drivebase::can::FL_DRIVE,
@@ -87,9 +89,6 @@ protected:
     kinematics, frc::Rotation2d{}, modulePostions, frc::Pose2d{}};
   frc::Rotation2d fieldRelativeOffset{};
 
-  std::thread odometryThread{&SwerveDrivebase::UpdateOdometry, this};
-  std::shared_mutex lock;
-
   SwerveDriveState cachedState{};
 
   SimSwerveDrivetrain simDrivetrain{kinematics, imu};
@@ -103,4 +102,15 @@ protected:
 
   std::function<void(SwerveDriveState)> telemetryFunction;
   bool validOdom{false};
+
+  std::array<ctre::phoenix6::BaseStatusSignal*, 18> allSignals;
+  int successfulDaqs = 0;
+  int failedDaqs = 0;
+  frc::LinearFilter<units::second_t> lowpass
+    = frc::LinearFilter<units::second_t>::MovingAverage(50);
+  frc::MedianFilter<units::second_t> peakRemover
+    = frc::MedianFilter<units::second_t>(3);
+  units::second_t lastTime = 0_s;
+  units::second_t currentTime = 0_s;
+  units::second_t averageLoopTime = 0_s;
 };
